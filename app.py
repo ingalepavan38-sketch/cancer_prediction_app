@@ -12,12 +12,14 @@ def load_model(path):
         print(f"Error loading {path}: {e}")
         try:
             with open(path, "rb") as f:
-                return pickle.load(f, encoding='latin1')
+                return pickle.load(f, encoding='latin1', fix_imports=True)
         except Exception as e2:
-            print(f"Failed to load {path} with latin1: {e2}")
+                    try:
+            with open(path, "rb") as f:
+                return pickle.load(f, fix_imports=True)
+        except Exception as e3:
+            print(f"Final attempt failed: {e3}")
             raise
-
-
 app = Flask(__name__)
 
 # Load models
