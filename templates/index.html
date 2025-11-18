@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cancer Level Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px 60px;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .input-box {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        input, select {
+            width: 300px;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #0077ff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #005fcc;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🩺 Cancer Level Prediction</h2>
+    <p>Fill the patient details below and click Predict.</p>
+
+    <form id="predictForm">
+
+        <div class="input-box">
+            <label>Age</label>
+            <input type="number" name="Age" min="1" max="120" required>
+        </div>
+
+        <div class="input-box">
+            <label>Gender</label>
+            <select name="Gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <!-- All your dataset fields as numeric sliders -->
+        <script>
+        const fields = [
+            "Air Pollution","Alcohol use","Dust Allergy","OccuPational Hazards","Genetic Risk",
+            "chronic Lung Disease","Balanced Diet","Obesity","Smoking","Passive Smoker",
+            "Chest Pain","Coughing of Blood","Fatigue","Weight Loss","Shortness of Breath",
+            "Wheezing","Swallowing Difficulty","Clubbing of Finger Nails","Frequent Cold",
+            "Dry Cough","Snoring"
+        ];
+        </script>
+
+        <div id="dynamicFields"></div>
+
+        <script>
+            const container = document.getElementById("dynamicFields");
+
+            fields.forEach(f => {
+                const div = document.createElement("div");
+                div.className = "input-box";
 
