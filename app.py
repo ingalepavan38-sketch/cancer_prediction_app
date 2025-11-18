@@ -1,13 +1,32 @@
 from flask import Flask, render_template, request
 import pandas as pd
 import pickle
+import os
+import sys
+
+def load_model(path):
+    try:
+        with open(path, "rb") as f:
+            return pickle.load(f)
+    except (pickle.UnpicklingError, ModuleNotFoundError, AttributeError) as e:
+        print(f"Error loading {path}: {e}")
+        try:
+            with open(path, "rb") as f:
+                return pickle.load(f, encoding='latin1')
+        except Exception as e2:
+            print(f"Failed to load {path} with latin1: {e2}")
+            raise
+
 
 app = Flask(__name__)
 
 # Load models
-model = pickle.load(open("models/final_model.pkl", "rb"))
-label_encoder = pickle.load(open("models/label_encoder.pkl", "rb"))
-
+try:
+    model = load_model("models/final_model.pkl")
+    label_encoder = load_model("models/label_encoder.pkl")
+except Exception as e:
+    print(f"Failed to load model files: {e}")
+    sys.exit(1)
 # All feature names
 features = [
     "Air Pollution","Alcohol use","Dust Allergy","OccuPational Hazards",
