@@ -45,7 +45,7 @@ st.subheader("Prediction")
 
 if st.button("Predict Cancer Level"):
     try:
-        api_url = "https://cancer-prediction-app-sp1r.onrender.com"   # Replace after deploying backend
+        api_url = "https://cancer-prediction-app-sp1r.onrender.com/predict"   # Replace after deploying backend
         response = requests.post(api_url, json=inputs)
 
         if response.status_code == 200:
