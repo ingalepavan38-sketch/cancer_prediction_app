@@ -1,60 +1,44 @@
-from flask import Flask, request, jsonify, render_template
-import joblib
-import numpy as np
+from flask import Flask, render_template, request
+import pandas as pd
+import pickle
 
-# ---------------------------
-# Initialize Flask App
-# ---------------------------
-app = Flask(__name__)   # templates folder is auto-detected
+app = Flask(__name__)
 
+# Load models
+model = pickle.load(open("models/final_model.pkl", "rb"))
+label_encoder = pickle.load(open("models/label_encoder.pkl", "rb"))
 
-# ---------------------------
-# Load Model & Encoder
-# ---------------------------
-try:
-    model = joblib.load("models/model.pkl")
-    label_encoder = joblib.load("models/label_encoder.pkl")
-    print("✅ Model & Label Encoder loaded successfully!")
-except Exception as e:
-    print("❌ Failed to load model files:", e)
+# All feature names
+features = [
+    "Air Pollution","Alcohol use","Dust Allergy","OccuPational Hazards",
+    "Genetic Risk","chronic Lung Disease","Balanced Diet","Obesity",
+    "Smoking","Passive Smoker","Chest Pain","Coughing of Blood",
+    "Fatigue","Weight Loss","Shortness of Breath","Wheezing",
+    "Swallowing Difficulty","Clubbing of Finger Nails","Frequent Cold",
+    "Dry Cough","Snoring"
+]
 
-
-# ---------------------------
-# Home Route — HTML UI
-# ---------------------------
 @app.route("/")
 def home():
-    return render_template("index.html")     # Make sure your file name matches
+    return render_template("index.html", features=features)
 
-
-# ---------------------------
-# Prediction Route (POST API)
-# ---------------------------
 @app.route("/predict", methods=["POST"])
 def predict():
-    try:
-        data = request.get_json()
+    # Collect inputs
+    data = {}
 
-        # Convert to array (order must match training)
-        input_values = list(data.values())
-        input_array = np.array(input_values).reshape(1, -1)
+    data["Age"] = int(request.form["Age"])
+    data["Gender"] = 1 if request.form["Gender"] == "Male" else 0
 
-        # Predict encoded class
-        pred_encoded = model.predict(input_array)[0]
+    for f in features:
+        data[f] = int(request.form[f])
 
-        # Decode label (Low, Medium, High)
-        pred_label = label_encoder.inverse_transform([pred_encoded])[0]
+    df = pd.DataFrame([data])
 
-        return jsonify({
-            "prediction": pred_label
-        })
+    prediction = model.predict(df)[0]
+    label = label_encoder.inverse_transform([prediction])[0]
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+    return render_template("result.html", prediction=label)
 
-
-# ---------------------------
-# Run App (only for local)
-# ---------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000, debug=True)
+    app.run()
