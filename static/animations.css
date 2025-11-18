@@ -1,1 +1,76 @@
+/* Fade-in for entire page */
+body {
+    animation: pageFade 0.6s ease-in-out;
+}
+
+@keyframes pageFade {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+/* Card appearance animation */
+.card {
+    animation: cardPop 0.5s ease;
+}
+
+@keyframes cardPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Input glow animation */
+input:focus, select:focus {
+    animation: inputGlow 0.3s forwards;
+}
+
+@keyframes inputGlow {
+    from {
+        box-shadow: 0 0 0 rgba(21,101,192,0);
+    }
+    to {
+        box-shadow: 0 0 10px rgba(21,101,192,0.4);
+    }
+}
+
+/* Button hover lift */
+button:hover {
+    animation: buttonLift 0.3s forwards;
+}
+
+@keyframes buttonLift {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-3px);
+    }
+}
+
+/* Prediction text fade-in (used on result page) */
+.prediction-text {
+    animation: predictionFade 0.8s ease-in-out;
+}
+
+@keyframes predictionFade {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
